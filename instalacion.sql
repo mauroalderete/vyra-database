@@ -545,3 +545,92 @@ PAGOS DE COMPROBANTES
 			CONCAT(old.CPAG_TIPO_CCCA, '-', old.CPAG_NUMERO_CCCA, '-', old.CPAG_PAGO),
 			current_user
 		);
+/************************************************************************************************************************************************
+MODULO CLIENTES
+*************************************************************************************************************************************************/
+/************************************************************************************************************************************************
+MAESTRO DE CLIENTES
+*************************************************************************************************************************************************/
+	/*
+	Tabla maestro de Clientes
+	*/
+	CREATE TABLE IF NOT EXISTS CLIE_CLIENTES (
+	CLIE_CLIENTE int	unsigned auto_increment	primary key comment 'Clave principal que identifica a un cliente',
+	CLIE_NOMBRE varchar(45) not null comment 'Nombre o razon social de un cliente',
+	CLIE_CONTACTO	varchar(45) comment 'Nombre del contacto principal del cliente',
+	CLIE_TELEFONO	varchar(45) comment 'Telefono para efectuar llamadas',
+	CLIE_WHATSAPP	varchar(45) comment 'Numero de whatsapp',
+	CLIE_EMAIL	varchar(100) comment 'Correo electronico principal o ventas',
+	CLIE_DIRECCION	varchar(100) comment 'Dirección principal. Generalmente coincide con el lugar de entrega de la mercadería',
+	CLIE_NOTAS	varchar(6000) comment 'Notas, comentarios y observaciones sobre el cliente',
+	CLIE_BAJA	tinyint not null default 0 comment 'Indica si el cliente esta dado de baja [1] o no [0]'
+	);
+		/*------------------------------------------
+		Registro en auditoria nuevo proveedor
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_insert;
+		CREATE TRIGGER auditoria_insert
+		after insert on CLIE_CLIENTES
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'insert',
+            'CLIE',
+            'CLIE',
+            'Alta de cliente',
+			new.CLIE_CLIENTE,
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria actualizacion de proveedor
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_update;
+		CREATE TRIGGER auditoria_update
+		after update on CLIE_CLIENTES
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'update',
+            'CLIE',
+            'CLIE',
+            'Modificación de cliente',
+			new.CLIE_CLIENTE,
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria eliminacion de proveedor
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_delete;
+		CREATE TRIGGER auditoria_delete
+		before delete on CLIE_CLIENTES
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+			AUDI_MODULO,
+			AUDI_SUBMODULO,
+			AUDI_OBSERVACION,
+			AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'delete',
+			'CLIE',
+			'CLIE',
+			'Eliminación de cliente',
+			old.CLIE_CLIENTE,
+			current_user
+		);
