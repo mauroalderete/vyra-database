@@ -381,7 +381,7 @@ DETALLE DE COMPROBANTES DE COMPRA
 		CCDE_TIPO_CCCA varchar(3) not null comment 'Tipo de comprobante',
         CCDE_NUMERO_CCCA int unsigned not null comment 'Numero de comprobante',
         CCDE_RENGLON int unsigned not null comment 'Renglon del detalle del comprobante',
-        CCDE_ARTICULO_ARTS int unsigned not null comment 'Numero del proveedor',
+        CCDE_ARTICULO_ARTS int unsigned not null comment 'Codigo del articulo a comprar',
         CCDE_CANTIDAD decimal unsigned not null default 1 comment 'Cantidad del articulo a ingresar',
         CCDE_DESCUENTO decimal unsigned null comment 'Descuento a aplicar sobre el articulo',
         CCDE_IMPORTE_BRUTO	decimal unsigned not null default 0 comment 'Importe unitario del articulo a ingresar sin el descuento aplicado',
@@ -632,5 +632,352 @@ MAESTRO DE CLIENTES
 			'CLIE',
 			'Eliminación de cliente',
 			old.CLIE_CLIENTE,
+			current_user
+		);
+/************************************************************************************************************************************************
+MODULO VENTAS
+*************************************************************************************************************************************************/
+/************************************************************************************************************************************************
+TIPOS DE COMPROBANTES DE VENTAS
+*************************************************************************************************************************************************/
+	/*
+    Tabla de tipos de comprobantes del modulo de compras
+    */
+    CREATE TABLE IF NOT EXISTS VENT_COMPROBANTES_TIPOS (
+		CVTP_TIPO varchar(3) not null primary key comment 'Codigo que identifica al tipo de comprobantes',
+        CVTP_NOMBRE varchar(100) not null comment 'Nombre largo del tipo de comprobante',
+        CVTP_NOTAS varchar(6000) comment 'Notas, obseraciones, descripción del tipo de comprobante',
+        CVTP_BAJA tinyint not null default 0 comment 'Indica si el tipo de comprobante esta dado de baja [1] o no [0]'
+    );
+		/*------------------------------------------
+		Registro en auditoria nuevo tipo de comprobante de egreso
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_insert;
+		CREATE TRIGGER auditoria_insert
+		after insert on VENT_COMPROBANTES_TIPOS
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'insert',
+            'VENT',
+            'CVTP',
+            'Alta de tipo de comprobante de venta',
+			new.CVTP_TIPO,
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria actualizacion de tipo de comprobante de ingreso
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_update;
+		CREATE TRIGGER auditoria_update
+		after update on VENT_COMPROBANTES_TIPOS
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'update',
+            'VENT',
+            'CVTP',
+            'Modificación de tipo de comprobante de venta',
+			new.CVTP_TIPO,
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria eliminacion de tipo de comprobante de ingreso
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_delete;
+		CREATE TRIGGER auditoria_delete
+		before delete on VENT_COMPROBANTES_TIPOS
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+			AUDI_MODULO,
+			AUDI_SUBMODULO,
+			AUDI_OBSERVACION,
+			AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'delete',
+			'VENT',
+			'CVTP',
+			'Eliminación de tipo de comprobante de venta',
+			old.CVTP_TIPO,
+			current_user
+		);
+
+/************************************************************************************************************************************************
+CABECERA DE COMPROBANTES DE VENTA
+*************************************************************************************************************************************************/
+	/*
+    Tabla de cabecera de comprobantes de venta
+    */
+    CREATE TABLE IF NOT EXISTS VENT_COMPROBANTES (
+		CVCA_TIPO_CVTP varchar(3) not null comment 'Tipo de comprobante',
+        CVCA_NUMERO int unsigned not null comment 'Numero de comprobante',
+        CVCA_CLIENTE_CLIE int unsigned not null comment 'Numero del cliente',
+        CVCA_COMPROBANTE varchar(45) null comment 'Codigo del comrpobante fisico si es que existe',
+        CVCA_TIEMPO datetime not null default current_timestamp comment 'Fecha y hora de emision del comprobante, puede ser diferente a la fecha y hora de alta del comprobante',
+        CVCA_DESCUENTO decimal null comment 'Descuento otorgado general a toda la venta. Null si no se aplica',
+        CVCA_NOTAS varchar(6000) comment 'Notas, obseraciones, descripción del tipo de comprobante',
+        CVCA_BAJA tinyint not null default 0 comment 'Indica si el tipo de comprobante esta dado de baja [1] o no [0]',
+        primary key (CVCA_TIPO_CVTP, CVCA_NUMERO),
+        foreign key (CVCA_TIPO_CVTP) references VENT_COMPROBANTES_TIPOS(CVTP_TIPO),
+        foreign key (CVCA_CLIENTE_CLIE) references CLIE_CLIENTES(CLIE_CLIENTE)
+    );
+		/*------------------------------------------
+		Registro en auditoria nuevo cabecera de comprobantes de venta
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_insert;
+		CREATE TRIGGER auditoria_insert
+		after insert on VENT_COMPROBANTES
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'insert',
+            'VENT',
+            'CVCA',
+            'Alta de cabecera de comprobante de venta',
+			CONCAT(new.CVCA_TIPO_CVTP, '-', new.CVCA_NUMERO),
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria actualizacion de cabecera de comprobantes de ventas
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_update;
+		CREATE TRIGGER auditoria_update
+		after update on VENT_COMPROBANTES
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'update',
+            'VENT',
+            'CVCA',
+            'Modificación de cabecera de comprobante de venta',
+			CONCAT(new.CVCA_TIPO_CVTP, '-', new.CVCA_NUMERO),
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria eliminacion de cabecera de comprobantes de ventas
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_delete;
+		CREATE TRIGGER auditoria_delete
+		before delete on VENT_COMPROBANTES
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+			AUDI_MODULO,
+			AUDI_SUBMODULO,
+			AUDI_OBSERVACION,
+			AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'delete',
+			'VENT',
+			'CVCA',
+			'Eliminación de cabecera de comprobante de ventas',
+			CONCAT(old.CVCA_TIPO_CVTP, '-', old.CVCA_NUMERO),
+			current_user
+		);
+/************************************************************************************************************************************************
+DETALLE DE COMPROBANTES DE VENTA
+*************************************************************************************************************************************************/
+	/*
+    Tabla de detalle de comprobantes de ventas
+    */
+    CREATE TABLE IF NOT EXISTS VENT_COMPROBANTES_DETALLE (
+		CVDE_TIPO_CVCA varchar(3) not null comment 'Tipo de comprobante',
+        CVDE_NUMERO_CVCA int unsigned not null comment 'Numero de comprobante',
+        CVDE_RENGLON int unsigned not null comment 'Renglon del detalle del comprobante',
+        CVDE_ARTICULO_ARTS int unsigned not null comment 'Codigo del articulo',
+        CVDE_CANTIDAD decimal unsigned not null default 1 comment 'Cantidad del articulo a vender',
+        CVDE_DESCUENTO decimal unsigned null comment 'Descuento a otorgar sobre el articulo',
+        CVDE_IMPORTE_BRUTO	decimal unsigned not null default 0 comment 'Importe unitario del articulo a ingresar sin el descuento aplicado',
+        CVDE_NOTAS varchar(6000) comment 'Notas, obseraciones, descripción del tipo de comprobante',
+        primary key (CVDE_TIPO_CVCA, CVDE_NUMERO_CVCA, CVDE_RENGLON),
+        foreign key (CVDE_TIPO_CVCA, CVDE_NUMERO_CVCA) references VENT_COMPROBANTES(CVCA_TIPO_CVTP, CVCA_NUMERO),
+        foreign key (CVDE_ARTICULO_ARTS) references STOC_ARTICULOS(ARTS_ARTICULO)
+    );
+		/*------------------------------------------
+		Registro en auditoria nuevo detalle de comprobante de venta
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_insert;
+		CREATE TRIGGER auditoria_insert
+		after insert on VENT_COMPROBANTES_DETALLE
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'insert',
+            'VENT',
+            'CVDE',
+            'Alta de detalle de comprobante venta',
+			CONCAT(new.CVDE_TIPO_CVCA, '-', new.CVDE_NUMERO_CVCA, '-', new.CVDE_RENGLON),
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria actualizacion de detalle de comprobante
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_update;
+		CREATE TRIGGER auditoria_update
+		after update on VENT_COMPROBANTES_DETALLE
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'update',
+            'VENT',
+            'CVDE',
+            'Modificación de detalle de comprobante venta',
+			CONCAT(new.CVDE_TIPO_CVCA, '-', new.CVDE_NUMERO_CVCA, '-', new.CVDE_RENGLON),
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria eliminacion de detalle de comprobante
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_delete;
+		CREATE TRIGGER auditoria_delete
+		before delete on VENT_COMPROBANTES_DETALLE
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+			AUDI_MODULO,
+			AUDI_SUBMODULO,
+			AUDI_OBSERVACION,
+			AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'delete',
+			'VENT',
+			'CVDE',
+			'Eliminación de detalle de comprobante venta',
+			CONCAT(old.CVDE_TIPO_CVCA, '-', old.CVDE_NUMERO_CVCA, '-', old.CVDE_RENGLON),
+			current_user
+		);
+/************************************************************************************************************************************************
+COBROS DE COMPROBANTES
+*************************************************************************************************************************************************/
+	/*
+    Tabla para registras cobros de facturas, recibos y otros documentos egresantes
+    */
+    CREATE TABLE IF NOT EXISTS VENT_COBROS (
+		CCOB_TIPO_CVCA varchar(3) not null comment 'Codigo que identifica al comprobante a cobrar',
+        CCOB_NUMERO_CVCA int unsigned not null comment 'Numero del comprobante a cobrar',
+        CCOB_COBRO int unsigned not null comment 'Renglon de la cuota o numero de cobro del comprobante',
+        CCOB_RECIBO	varchar(45) null comment 'Codigo identificatorio del recibo emitido tras la recepción del pago',
+        CCOB_DESCUENTO decimal unsigned null comment 'Descuento otorgado al recibir el cobro',
+        CCOB_IMPORTE_BRUTO decimal unsigned not null default 0 comment 'Importe cobrad sin el descuento otorgado aplicado',
+        CCOB_NOTAS varchar(6000) comment 'Notas, obseraciones, descripción del cobro',
+        primary key (CCOB_TIPO_CVCA, CCOB_NUMERO_CVCA, CCOB_COBRO),
+        foreign key (CCOB_TIPO_CVCA, CCOB_NUMERO_CVCA) references VENT_COMPROBANTES(CVCA_TIPO_CVTP, CVCA_NUMERO)
+    );
+		/*------------------------------------------
+		Registro en auditoria nuevo pago
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_insert;
+		CREATE TRIGGER auditoria_insert
+		after insert on VENT_COBROS
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'insert',
+            'VENT',
+            'CCOB',
+            'Alta de cobro',
+			CONCAT(new.CCOB_TIPO_CVCA, '-', new.CCOB_NUMERO_CVCA, '-', new.CCOB_COBRO),
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria actualizacion de pago
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_update;
+		CREATE TRIGGER auditoria_update
+		after update on VENT_COBROS
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'update',
+            'VENT',
+            'CCOB',
+            'Modificación de cobro',
+			CONCAT(new.CCOB_TIPO_CVCA, '-', new.CCOB_NUMERO_CVCA, '-', new.CCOB_COBRO),
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria eliminacion de pago
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_delete;
+		CREATE TRIGGER auditoria_delete
+		before delete on VENT_COBROS
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+			AUDI_MODULO,
+			AUDI_SUBMODULO,
+			AUDI_OBSERVACION,
+			AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'delete',
+			'VENT',
+			'COCB',
+			'Eliminación de cobro',
+			CONCAT(old.CCOB_TIPO_CVCA, '-', old.CCOB_NUMERO_CVCA, '-', old.CCOB_COBRO),
 			current_user
 		);
