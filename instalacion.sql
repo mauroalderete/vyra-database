@@ -462,3 +462,86 @@ DETALLE DE COMPROBANTES DE COMPRA
 /************************************************************************************************************************************************
 PAGOS DE COMPROBANTES
 *************************************************************************************************************************************************/
+	/*
+    Tabla para registras pagos de facturas, recibos y otros documentos ingresantes
+    */
+    CREATE TABLE IF NOT EXISTS COMP_PAGOS (
+		CPAG_TIPO_CCCA varchar(3) not null comment 'Codigo que identifica al comprobante a pagar',
+        CPAG_NUMERO_CCCA int unsigned not null comment 'Numero del comprobante a pagar',
+        CPAG_PAGO int unsigned not null comment 'Renglon de la cuota o numero de pago del comprobante',
+        CPAG_RECIBO	varchar(45) null comment 'Codigo identificatorio del recibo obtenido tras el pago del comprobante',
+        CPAG_DESCUENTO decimal unsigned null comment 'Descuento obtenido al realizar el pago',
+        CPAG_IMPORTE_BRUTO decimal unsigned not null default 0 comment 'Importe pagado sin el descuento recibido aplicado',
+        CPAG_NOTAS varchar(6000) comment 'Notas, obseraciones, descripción del pago',
+        primary key (CPAG_TIPO_CCCA, CPAG_NUMERO_CCCA, CPAG_PAGO),
+        foreign key (CPAG_TIPO_CCCA, CPAG_NUMERO_CCCA) references COMP_COMPROBANTES(CCCA_TIPO_CCTP, CCCA_NUMERO)
+    );
+		/*------------------------------------------
+		Registro en auditoria nuevo pago
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_insert;
+		CREATE TRIGGER auditoria_insert
+		after insert on COMP_PAGOS
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'insert',
+            'COMP',
+            'CPAG',
+            'Alta de pago',
+			CONCAT(new.CPAG_TIPO_CCCA, '-', new.CPAG_NUMERO_CCCA, '-', new.CPAG_PAGO),
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria actualizacion de pago
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_update;
+		CREATE TRIGGER auditoria_update
+		after update on COMP_PAGOS
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'update',
+            'COMP',
+            'CPAG',
+            'Modificación de pago',
+			CONCAT(new.CPAG_TIPO_CCCA, '-', new.CPAG_NUMERO_CCCA, '-', new.CPAG_PAGO),
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria eliminacion de pago
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_delete;
+		CREATE TRIGGER auditoria_delete
+		before delete on COMP_PAGOS
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+			AUDI_MODULO,
+			AUDI_SUBMODULO,
+			AUDI_OBSERVACION,
+			AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'delete',
+			'COMP',
+			'CPAG',
+			'Eliminación de pago',
+			CONCAT(old.CPAG_TIPO_CCCA, '-', old.CPAG_NUMERO_CCCA, '-', old.CPAG_PAGO),
+			current_user
+		);
