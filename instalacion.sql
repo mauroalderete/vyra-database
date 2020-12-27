@@ -22,6 +22,15 @@ MODULO AUDITORIA
 		AUDI_TIEMPO datetime not null default current_timestamp comment 'Fecha y hora en la que se realizo la operacion',
 		AUDI_AUTOR varchar(45) not null comment 'Autor de la operacion, nombre de usuario de la sesion sql'
 	);
+    /*
+	Registro de eventos
+	*/
+	CREATE TABLE IF NOT EXISTS AUDI_LOG (
+		LOG_LOG bigint unsigned not null auto_increment primary key comment 'Clave principal de la auditoria',
+        LOG_NIVEL tinyint unsigned not null default 0 comment 'Nivel de log: 0 Critico, 10 Error, 20 Advertencia, 30 Depuración 40 Informacion',
+        LOG_MENSAJE varchar(6000) not null comment 'Mensaje a informar',
+        LOG_TIEMPO datetime not null default current_timestamp comment 'Fecha y hora del log'
+	);
 
 /************************************************************************************************************************************************
 MODULO PROVEEDORES
