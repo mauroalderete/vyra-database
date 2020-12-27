@@ -27,10 +27,13 @@ MODULO AUDITORIA
 	*/
 	CREATE TABLE IF NOT EXISTS AUDI_LOG (
 		LOG_LOG bigint unsigned not null auto_increment primary key comment 'Clave principal de la auditoria',
+        LOG_ORIGEN varchar(45) not null comment 'Modulo, autor, sector, bloque, funcion, proceso, trigger u otro posible origen que genera el log',
         LOG_NIVEL tinyint unsigned not null default 0 comment 'Nivel de log: 0 Critico, 10 Error, 20 Advertencia, 30 Depuración 40 Informacion',
         LOG_MENSAJE varchar(6000) not null comment 'Mensaje a informar',
         LOG_TIEMPO datetime not null default current_timestamp comment 'Fecha y hora del log'
 	);
+
+INSERT INTO AUDI_LOG (LOG_ORIGEN, LOG_NIVEL, LOG_MENSAJE) VALUES ('Instalación', 40, 'Inicio de la instalación de dbVyra');    
 
 /************************************************************************************************************************************************
 MODULO PROVEEDORES
@@ -1079,3 +1082,5 @@ REGISTRO DE MOVIMIENTOS DE STOCK
 			CONCAT(old.MOVS_TIPO_COMP,'-', old.MOVS_NUMERO_COMP,'/', old.MOVS_RENGLON_COMP, '[', old.MOVS_ARTICULO_ARTS,',', old.MOVS_PARTIDA,']'),
 			current_user
 		);
+        
+INSERT INTO AUDI_LOG (LOG_ORIGEN, LOG_NIVEL, LOG_MENSAJE) VALUES ('Instalación', 40, 'Finalización de la instalación de dbVyra');
