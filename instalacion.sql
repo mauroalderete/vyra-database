@@ -13,7 +13,7 @@ MODULO AUDITORIA
 	Auditoria de modulos
 	*/
 	CREATE TABLE IF NOT EXISTS AUDI_AUDITORIA (
-		AUDI_AUDITORIA bigint unsigned not null auto_increment primary key comment 'Clave principal de la auditoria del modulo de proveedores',
+		AUDI_AUDITORIA bigint unsigned not null auto_increment primary key comment 'Clave principal de la auditoria',
         AUDI_MODULO varchar(4) not null comment 'Modulo al que pertenece el evento a auditar',
         AUDI_SUBMODULO varchar(4) null comment 'Submodulo o tabla al que pertenece el evento a auditar',
         AUDI_OBSERVACION varchar(150) null comment 'Resumen de operacion',
@@ -97,22 +97,22 @@ MAESTRO DE PROVEEDORES
 		CREATE TRIGGER auditoria_delete
 		before delete on PROV_PROVEEDORES
 		for each row
-			insert into AUDI_AUDITORIA (
-				AUDI_OPERACION,
-                AUDI_MODULO,
-                AUDI_SUBMODULO,
-                AUDI_OBSERVACION,
-				AUDI_ENTIDAD,
-				AUDI_AUTOR
-			)
-			values (
-				'delete',
-                'PROV',
-                'PROV',
-				'Eliminación de proveedor',
-				OLD.PROV_PROVEEDOR,
-				current_user
-			);
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+			AUDI_MODULO,
+			AUDI_SUBMODULO,
+			AUDI_OBSERVACION,
+			AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'delete',
+			'PROV',
+			'PROV',
+			'Eliminación de proveedor',
+			OLD.PROV_PROVEEDOR,
+			current_user
+		);
 /************************************************************************************************************************************************
 MODULO STOCK
 *************************************************************************************************************************************************/
@@ -182,22 +182,22 @@ MAESTRO DE ARTICULOS
 		CREATE TRIGGER auditoria_delete
 		before delete on STOC_ARTICULOS
 		for each row
-			insert into AUDI_AUDITORIA (
-				AUDI_OPERACION,
-                AUDI_MODULO,
-                AUDI_SUBMODULO,
-                AUDI_OBSERVACION,
-				AUDI_ENTIDAD,
-				AUDI_AUTOR
-			)
-			values (
-				'delete',
-                'STOC',
-                'ARTS',
-				'Eliminación de artículo',
-				OLD.ARTS_ARTICULO,
-				current_user
-			);
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+			AUDI_MODULO,
+			AUDI_SUBMODULO,
+			AUDI_OBSERVACION,
+			AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'delete',
+			'STOC',
+			'ARTS',
+			'Eliminación de artículo',
+			OLD.ARTS_ARTICULO,
+			current_user
+		);
 /************************************************************************************************************************************************
 MODULO COMPRAS
 *************************************************************************************************************************************************/
@@ -266,22 +266,22 @@ TIPOS DE COMPROBANTES DE COMPRAS
 		CREATE TRIGGER auditoria_delete
 		before delete on COMP_COMPROBANTES_TIPOS
 		for each row
-			insert into AUDI_AUDITORIA (
-				AUDI_OPERACION,
-                AUDI_MODULO,
-                AUDI_SUBMODULO,
-                AUDI_OBSERVACION,
-				AUDI_ENTIDAD,
-				AUDI_AUTOR
-			)
-			values (
-				'delete',
-                'COMP',
-                'CCTP',
-				'Eliminación de tipo de comprobante de compra',
-				OLD.CCTP_TIPO,
-				current_user
-			);
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+			AUDI_MODULO,
+			AUDI_SUBMODULO,
+			AUDI_OBSERVACION,
+			AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'delete',
+			'COMP',
+			'CCTP',
+			'Eliminación de tipo de comprobante de compra',
+			OLD.CCTP_TIPO,
+			current_user
+		);
 
 /************************************************************************************************************************************************
 CABECERA DE COMPROBANTES DE COMPRA
@@ -290,7 +290,7 @@ CABECERA DE COMPROBANTES DE COMPRA
     Tabla de cabecera de comprobantes de compras
     */
     CREATE TABLE IF NOT EXISTS COMP_COMPROBANTES (
-		CCCA_TIPO_CCTP varchar(3) not null comment 'Codigo que identifica al tipo de comprobantes',
+		CCCA_TIPO_CCTP varchar(3) not null comment 'Tipo de comprobante',
         CCCA_NUMERO int unsigned not null comment 'Numero de comprobante',
         CCCA_PROVEEDOR_PROV int unsigned not null comment 'Numero del proveedor',
         CCCA_COMPROBANTE varchar(45) null comment 'Codigo del comrpobante fisico si es que existe',
@@ -321,7 +321,7 @@ CABECERA DE COMPROBANTES DE COMPRA
 			'insert',
             'COMP',
             'CCCA',
-            'Alta cabecera de comprobante',
+            'Alta de cabecera de comprobante',
 			CONCAT(new.CCCA_TIPO_CCTP, '-', new.CCCA_NUMERO),
 			current_user
 		);
@@ -355,22 +355,22 @@ CABECERA DE COMPROBANTES DE COMPRA
 		CREATE TRIGGER auditoria_delete
 		before delete on COMP_COMPROBANTES
 		for each row
-			insert into AUDI_AUDITORIA (
-				AUDI_OPERACION,
-                AUDI_MODULO,
-                AUDI_SUBMODULO,
-                AUDI_OBSERVACION,
-				AUDI_ENTIDAD,
-				AUDI_AUTOR
-			)
-			values (
-				'delete',
-                'COMP',
-                'CCCA',
-				'Eliminación de cabecera de comprobante',
-				CONCAT(old.CCCA_TIPO_CCTP, '-', old.CCCA_NUMERO),
-				current_user
-			);
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+			AUDI_MODULO,
+			AUDI_SUBMODULO,
+			AUDI_OBSERVACION,
+			AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'delete',
+			'COMP',
+			'CCCA',
+			'Eliminación de cabecera de comprobante',
+			CONCAT(old.CCCA_TIPO_CCTP, '-', old.CCCA_NUMERO),
+			current_user
+		);
 /************************************************************************************************************************************************
 DETALLE DE COMPROBANTES DE COMPRA
 *************************************************************************************************************************************************/
@@ -378,7 +378,7 @@ DETALLE DE COMPROBANTES DE COMPRA
     Tabla de detalle de comprobantes de compras
     */
     CREATE TABLE IF NOT EXISTS COMP_COMPROBANTES_DETALLE (
-		CCDE_TIPO_CCCA varchar(3) not null comment 'Codigo que identifica al tipo de comprobantes',
+		CCDE_TIPO_CCCA varchar(3) not null comment 'Tipo de comprobante',
         CCDE_NUMERO_CCCA int unsigned not null comment 'Numero de comprobante',
         CCDE_RENGLON int unsigned not null comment 'Renglon del detalle del comprobante',
         CCDE_ARTICULO_ARTS int unsigned not null comment 'Numero del proveedor',
@@ -409,7 +409,7 @@ DETALLE DE COMPROBANTES DE COMPRA
 			'insert',
             'COMP',
             'CCDE',
-            'Alta detalle de comprobante',
+            'Alta de detalle de comprobante',
 			CONCAT(new.CCDE_TIPO_CCCA, '-', new.CCDE_NUMERO_CCCA, '-', new.CCDE_RENGLON),
 			current_user
 		);
@@ -443,22 +443,22 @@ DETALLE DE COMPROBANTES DE COMPRA
 		CREATE TRIGGER auditoria_delete
 		before delete on COMP_COMPROBANTES_DETALLE
 		for each row
-			insert into AUDI_AUDITORIA (
-				AUDI_OPERACION,
-                AUDI_MODULO,
-                AUDI_SUBMODULO,
-                AUDI_OBSERVACION,
-				AUDI_ENTIDAD,
-				AUDI_AUTOR
-			)
-			values (
-				'delete',
-                'COMP',
-                'CCDE',
-				'Eliminación de detalle de comprobante',
-                CONCAT(old.CCDE_TIPO_CCCA, '-', old.CCDE_NUMERO_CCCA, '-', old.CCDE_RENGLON),
-				current_user
-			);
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+			AUDI_MODULO,
+			AUDI_SUBMODULO,
+			AUDI_OBSERVACION,
+			AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'delete',
+			'COMP',
+			'CCDE',
+			'Eliminación de detalle de comprobante',
+			CONCAT(old.CCDE_TIPO_CCCA, '-', old.CCDE_NUMERO_CCCA, '-', old.CCDE_RENGLON),
+			current_user
+		);
 /************************************************************************************************************************************************
 PAGOS DE COMPROBANTES
 *************************************************************************************************************************************************/
