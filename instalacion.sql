@@ -979,5 +979,93 @@ COBROS DE COMPROBANTES
 			'COCB',
 			'Eliminación de cobro',
 			CONCAT(old.CCOB_TIPO_CVCA, '-', old.CCOB_NUMERO_CVCA, '-', old.CCOB_COBRO),
+		);
+/************************************************************************************************************************************************
+MODULO STOCK (2/2)
+*************************************************************************************************************************************************/
+/************************************************************************************************************************************************
+REGISTRO DE MOVIMIENTOS DE STOCK
+*************************************************************************************************************************************************/
+	/*
+	Movimiento de stock
+	*/
+	CREATE TABLE IF NOT EXISTS STOC_MOVIMIENTOS (
+	MOVS_ARTICULO_ARTS int unsigned not null comment 'Codigo del articulo sobre el que se efectua un movimiento de su stock',
+    MOVS_PARTIDA int unsigned not null default 1 comment 'Numero de la partida del articulo. Se debe incrementar cada vez que se ingresa stock del articulo. Se resta desde la partida mas antigua (la partida mas pequeña) cada vez que se egresa stock del articulo',
+    MOVS_TIPO_COMP varchar(3) not null comment 'Tipo de comprobante que valida el movimiento de stock',
+    MOVS_NUMERO_COMP int unsigned not null comment 'Numero del comprobante que valida el movimiento de stock',
+    MOVS_RENGLON_COMP int unsigned not null comment 'Numero del renglon del comprobante que señala al articulo involucrado en el movimiento del stock',
+    MOVS_OPERACION varchar(1) not null comment 'Define si el movimiento de stock es de salida ["S"] o entrada ["E"]',
+    MOVS_CANTIDAD decimal not null comment 'La cantidad de stock movilizado',
+    primary key (MOVS_ARTICULO_ARTS, MOVS_PARTIDA, MOVS_TIPO_COMP, MOVS_NUMERO_COMP, MOVS_RENGLON_COMP ),
+	foreign key (MOVS_ARTICULO_ARTS) references STOC_ARTICULOS(ARTS_ARTICULO)
+	);
+		/*------------------------------------------
+		Registro en auditoria nuevo articulo
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_insert;
+		CREATE TRIGGER auditoria_insert
+		after insert on STOC_MOVIMIENTOS
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODELO,
+            AUDI_SUBMODELO,
+            AUDI_OBSERVACION,
+			AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'insert',
+            'STOC',
+            'MOVS',
+            'Alta de movimiento de stock',
+            CONCAT(new.MOVS_TIPO_COMP,'-', new.MOVS_NUMERO_COMP,'/', new.MOVS_RENGLON_COMP, '[', new.MOVS_ARTICULO_ARTS,',', new.MOVS_PARTIDA,']'),
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria actualizacion de articulo
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_update;
+		CREATE TRIGGER auditoria_update
+		after update on STOC_MOVIMIENTOS
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'update',
+            'STOC',
+            'MOVS',
+            'Modificación de movimiento de stock',
+			CONCAT(new.MOVS_TIPO_COMP,'-', new.MOVS_NUMERO_COMP,'/', new.MOVS_RENGLON_COMP, '[', new.MOVS_ARTICULO_ARTS,',', new.MOVS_PARTIDA,']'),
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria eliminacion de articulo
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_delete;
+		CREATE TRIGGER auditoria_delete
+		before delete on STOC_MOVIMIENTOS
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+			AUDI_MODULO,
+			AUDI_SUBMODULO,
+			AUDI_OBSERVACION,
+			AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'delete',
+			'STOC',
+			'MOVS',
+			'Eliminación de movimiento de stock',
+			CONCAT(old.MOVS_TIPO_COMP,'-', old.MOVS_NUMERO_COMP,'/', old.MOVS_RENGLON_COMP, '[', old.MOVS_ARTICULO_ARTS,',', old.MOVS_PARTIDA,']'),
 			current_user
 		);
