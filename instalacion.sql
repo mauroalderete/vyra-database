@@ -387,7 +387,7 @@ DETALLE DE COMPROBANTES DE COMPRA
         CCDE_IMPORTE_BRUTO	decimal unsigned not null default 0 comment 'Importe unitario del articulo a ingresar sin el descuento aplicado',
         CCDE_NOTAS varchar(6000) comment 'Notas, obseraciones, descripción del tipo de comprobante',
         primary key (CCDE_TIPO_CCCA, CCDE_NUMERO_CCCA, CCDE_RENGLON),
-        foreign key (CCDE_TIPO_CCCA) references COMP_COMPROBANTES(CCCA_TIPO_CCTP),
+        foreign key (CCDE_TIPO_CCCA, CCDE_NUMERO_CCCA) references COMP_COMPROBANTES(CCCA_TIPO_CCTP, CCCA_NUMERO),
         foreign key (CCDE_ARTICULO_ARTS) references STOC_ARTICULOS(ARTS_ARTICULO)
     );
 		/*------------------------------------------
