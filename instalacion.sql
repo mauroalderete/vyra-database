@@ -286,9 +286,179 @@ TIPOS DE COMPROBANTES DE COMPRAS
 /************************************************************************************************************************************************
 CABECERA DE COMPROBANTES DE COMPRA
 *************************************************************************************************************************************************/
+	/*
+    Tabla de cabecera de comprobantes de compras
+    */
+    CREATE TABLE IF NOT EXISTS COMP_COMPROBANTES (
+		CCCA_TIPO_CCTP varchar(3) not null comment 'Codigo que identifica al tipo de comprobantes',
+        CCCA_NUMERO int unsigned not null comment 'Numero de comprobante',
+        CCCA_PROVEEDOR_PROV int unsigned not null comment 'Numero del proveedor',
+        CCCA_COMPROBANTE varchar(45) null comment 'Codigo del comrpobante fisico si es que existe',
+        CCCA_TIEMPO datetime not null default current_timestamp comment 'Fecha y hora de emision del comprobante, puede ser diferente a la fecha y hora de alta del comprobante',
+        CCCA_DESCUENTO decimal null comment 'Descuento general a toda la factura. Null si no se aplica',
+        CCCA_NOTAS varchar(6000) comment 'Notas, obseraciones, descripción del tipo de comprobante',
+        CCCA_BAJA tinyint not null default 0 comment 'Indica si el tipo de comprobante esta dado de baja [1] o no [0]',
+        primary key (CCCA_TIPO_CCTP, CCCA_NUMERO),
+        foreign key (CCCA_TIPO_CCTP) references COMP_COMPROBANTES_TIPOS(CCTP_TIPO),
+        foreign key (CCCA_PROVEEDOR_PROV) references PROV_PROVEEDORES(PROV_PROVEEDOR)
+    );
+		/*------------------------------------------
+		Registro en auditoria nuevo cabecera de comprobantes de compras
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_insert;
+		CREATE TRIGGER auditoria_insert
+		after insert on COMP_COMPROBANTES
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'insert',
+            'COMP',
+            'CCCA',
+            'Alta cabecera de comprobante',
+			CONCAT(new.CCCA_TIPO_CCTP, '-', new.CCCA_NUMERO),
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria actualizacion de cabecera de comprobantes de compras
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_update;
+		CREATE TRIGGER auditoria_update
+		after update on COMP_COMPROBANTES
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'update',
+            'COMP',
+            'CCCA',
+            'Modificación de cabecera de comprobante',
+			CONCAT(new.CCCA_TIPO_CCTP, '-', new.CCCA_NUMERO),
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria eliminacion de cabecera de comprobantes de compras
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_delete;
+		CREATE TRIGGER auditoria_delete
+		before delete on COMP_COMPROBANTES
+		for each row
+			insert into AUDI_AUDITORIA (
+				AUDI_OPERACION,
+                AUDI_MODULO,
+                AUDI_SUBMODULO,
+                AUDI_OBSERVACION,
+				AUDI_ENTIDAD,
+				AUDI_AUTOR
+			)
+			values (
+				'delete',
+                'COMP',
+                'CCCA',
+				'Eliminación de cabecera de comprobante',
+				CONCAT(old.CCCA_TIPO_CCTP, '-', old.CCCA_NUMERO),
+				current_user
+			);
 /************************************************************************************************************************************************
 DETALLE DE COMPROBANTES DE COMPRA
 *************************************************************************************************************************************************/
+	/*
+    Tabla de detalle de comprobantes de compras
+    */
+    CREATE TABLE IF NOT EXISTS COMP_COMPROBANTES_DETALLE (
+		CCDE_TIPO_CCCA varchar(3) not null comment 'Codigo que identifica al tipo de comprobantes',
+        CCDE_NUMERO_CCCA int unsigned not null comment 'Numero de comprobante',
+        CCDE_RENGLON int unsigned not null comment 'Renglon del detalle del comprobante',
+        CCDE_ARTICULO_ARTS int unsigned not null comment 'Numero del proveedor',
+        CCDE_CANTIDAD decimal unsigned not null default 1 comment 'Cantidad del articulo a ingresar',
+        CCDE_DESCUENTO decimal unsigned null comment 'Descuento a aplicar sobre el articulo',
+        CCDE_IMPORTE_BRUTO	decimal unsigned not null default 0 comment 'Importe unitario del articulo a ingresar sin el descuento aplicado',
+        CCDE_NOTAS varchar(6000) comment 'Notas, obseraciones, descripción del tipo de comprobante',
+        primary key (CCDE_TIPO_CCCA, CCDE_NUMERO_CCCA, CCDE_RENGLON),
+        foreign key (CCDE_TIPO_CCCA) references COMP_COMPROBANTES(CCCA_TIPO_CCTP),
+        foreign key (CCDE_ARTICULO_ARTS) references STOC_ARTICULOS(ARTS_ARTICULO)
+    );
+		/*------------------------------------------
+		Registro en auditoria nuevo detalle de comprobante
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_insert;
+		CREATE TRIGGER auditoria_insert
+		after insert on COMP_COMPROBANTES_DETALLE
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'insert',
+            'COMP',
+            'CCDE',
+            'Alta detalle de comprobante',
+			CONCAT(new.CCDE_TIPO_CCCA, '-', new.CCDE_NUMERO_CCCA, '-', new.CCDE_RENGLON),
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria actualizacion de detalle de comprobante
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_update;
+		CREATE TRIGGER auditoria_update
+		after update on COMP_COMPROBANTES_DETALLE
+		for each row
+		insert into AUDI_AUDITORIA (
+			AUDI_OPERACION,
+            AUDI_MODULO,
+			AUDI_SUBMODULO,
+            AUDI_OBSERVACION,
+            AUDI_ENTIDAD,
+			AUDI_AUTOR
+		)
+		values (
+			'update',
+            'COMP',
+            'CCDE',
+            'Modificación de detalle de comprobante',
+			CONCAT(new.CCDE_TIPO_CCCA, '-', new.CCDE_NUMERO_CCCA, '-', new.CCDE_RENGLON),
+			current_user
+		);
+		/*------------------------------------------
+		Registro en auditoria eliminacion de detalle de comprobante
+		--------------------------------------------*/
+		DROP TRIGGER IF EXISTS auditoria_delete;
+		CREATE TRIGGER auditoria_delete
+		before delete on COMP_COMPROBANTES_DETALLE
+		for each row
+			insert into AUDI_AUDITORIA (
+				AUDI_OPERACION,
+                AUDI_MODULO,
+                AUDI_SUBMODULO,
+                AUDI_OBSERVACION,
+				AUDI_ENTIDAD,
+				AUDI_AUTOR
+			)
+			values (
+				'delete',
+                'COMP',
+                'CCDE',
+				'Eliminación de detalle de comprobante',
+                CONCAT(old.CCDE_TIPO_CCCA, '-', old.CCDE_NUMERO_CCCA, '-', old.CCDE_RENGLON),
+				current_user
+			);
 /************************************************************************************************************************************************
 PAGOS DE COMPROBANTES
 *************************************************************************************************************************************************/
