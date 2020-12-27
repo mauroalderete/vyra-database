@@ -47,8 +47,8 @@ MAESTRO DE PROVEEDORES
 		/*------------------------------------------
 		Registro en auditoria nuevo proveedor
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_insert;
-		CREATE TRIGGER auditoria_insert
+		DROP TRIGGER IF EXISTS PROV_PROVEEDORES_auditoria_insert;
+		CREATE TRIGGER PROV_PROVEEDORES_auditoria_insert
 		after insert on PROV_PROVEEDORES
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -70,8 +70,8 @@ MAESTRO DE PROVEEDORES
 		/*------------------------------------------
 		Registro en auditoria actualizacion de proveedor
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_update;
-		CREATE TRIGGER auditoria_update
+		DROP TRIGGER IF EXISTS PROV_PROVEEDORES_auditoria_update;
+		CREATE TRIGGER PROV_PROVEEDORES_auditoria_update
 		after update on PROV_PROVEEDORES
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -93,8 +93,8 @@ MAESTRO DE PROVEEDORES
 		/*------------------------------------------
 		Registro en auditoria eliminacion de proveedor
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_delete;
-		CREATE TRIGGER auditoria_delete
+		DROP TRIGGER IF EXISTS PROV_PROVEEDORES_auditoria_delete;
+		CREATE TRIGGER PROV_PROVEEDORES_auditoria_delete
 		before delete on PROV_PROVEEDORES
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -132,8 +132,8 @@ MAESTRO DE ARTICULOS
 		/*------------------------------------------
 		Registro en auditoria nuevo articulo
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_insert;
-		CREATE TRIGGER auditoria_insert
+		DROP TRIGGER IF EXISTS STOC_ARTICULOS_auditoria_insert;
+		CREATE TRIGGER STOC_ARTICULOS_auditoria_insert
 		after insert on STOC_ARTICULOS
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -155,8 +155,8 @@ MAESTRO DE ARTICULOS
 		/*------------------------------------------
 		Registro en auditoria actualizacion de articulo
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_update;
-		CREATE TRIGGER auditoria_update
+		DROP TRIGGER IF EXISTS STOC_ARTICULOS_auditoria_update;
+		CREATE TRIGGER STOC_ARTICULOS_auditoria_update
 		after update on STOC_ARTICULOS
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -178,8 +178,8 @@ MAESTRO DE ARTICULOS
 		/*------------------------------------------
 		Registro en auditoria eliminacion de articulo
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_delete;
-		CREATE TRIGGER auditoria_delete
+		DROP TRIGGER IF EXISTS STOC_ARTICULOS_auditoria_delete;
+		CREATE TRIGGER STOC_ARTICULOS_auditoria_delete
 		before delete on STOC_ARTICULOS
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -216,8 +216,8 @@ TIPOS DE COMPROBANTES DE COMPRAS
 		/*------------------------------------------
 		Registro en auditoria nuevo tipo de comprobante de ingreso
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_insert;
-		CREATE TRIGGER auditoria_insert
+		DROP TRIGGER IF EXISTS COMP_COMPROBANTES_TIPOS_auditoria_insert;
+		CREATE TRIGGER COMP_COMPROBANTES_TIPOS_auditoria_insert
 		after insert on COMP_COMPROBANTES_TIPOS
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -239,8 +239,8 @@ TIPOS DE COMPROBANTES DE COMPRAS
 		/*------------------------------------------
 		Registro en auditoria actualizacion de tipo de comprobante de ingreso
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_update;
-		CREATE TRIGGER auditoria_update
+		DROP TRIGGER IF EXISTS COMP_COMPROBANTES_TIPOS_auditoria_update;
+		CREATE TRIGGER COMP_COMPROBANTES_TIPOS_auditoria_update
 		after update on COMP_COMPROBANTES_TIPOS
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -262,8 +262,8 @@ TIPOS DE COMPROBANTES DE COMPRAS
 		/*------------------------------------------
 		Registro en auditoria eliminacion de tipo de comprobante de ingreso
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_delete;
-		CREATE TRIGGER auditoria_delete
+		DROP TRIGGER IF EXISTS COMP_COMPROBANTES_TIPOS_auditoria_delete;
+		CREATE TRIGGER COMP_COMPROBANTES_TIPOS_auditoria_delete
 		before delete on COMP_COMPROBANTES_TIPOS
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -305,8 +305,8 @@ CABECERA DE COMPROBANTES DE COMPRA
 		/*------------------------------------------
 		Registro en auditoria nuevo cabecera de comprobantes de compras
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_insert;
-		CREATE TRIGGER auditoria_insert
+		DROP TRIGGER IF EXISTS COMP_COMPROBANTES_auditoria_insert;
+		CREATE TRIGGER COMP_COMPROBANTES_auditoria_insert
 		after insert on COMP_COMPROBANTES
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -328,8 +328,8 @@ CABECERA DE COMPROBANTES DE COMPRA
 		/*------------------------------------------
 		Registro en auditoria actualizacion de cabecera de comprobantes de compras
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_update;
-		CREATE TRIGGER auditoria_update
+		DROP TRIGGER IF EXISTS COMP_COMPROBANTES_auditoria_update;
+		CREATE TRIGGER COMP_COMPROBANTES_auditoria_update
 		after update on COMP_COMPROBANTES
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -351,8 +351,8 @@ CABECERA DE COMPROBANTES DE COMPRA
 		/*------------------------------------------
 		Registro en auditoria eliminacion de cabecera de comprobantes de compras
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_delete;
-		CREATE TRIGGER auditoria_delete
+		DROP TRIGGER IF EXISTS COMP_COMPROBANTES_auditoria_delete;
+		CREATE TRIGGER COMP_COMPROBANTES_auditoria_delete
 		before delete on COMP_COMPROBANTES
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -393,8 +393,8 @@ DETALLE DE COMPROBANTES DE COMPRA
 		/*------------------------------------------
 		Registro en auditoria nuevo detalle de comprobante
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_insert;
-		CREATE TRIGGER auditoria_insert
+		DROP TRIGGER IF EXISTS COMP_COMPROBANTES_DETALLE_auditoria_insert;
+		CREATE TRIGGER COMP_COMPROBANTES_DETALLE_auditoria_insert
 		after insert on COMP_COMPROBANTES_DETALLE
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -416,8 +416,8 @@ DETALLE DE COMPROBANTES DE COMPRA
 		/*------------------------------------------
 		Registro en auditoria actualizacion de detalle de comprobante
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_update;
-		CREATE TRIGGER auditoria_update
+		DROP TRIGGER IF EXISTS COMP_COMPROBANTES_DETALLE_auditoria_update;
+		CREATE TRIGGER COMP_COMPROBANTES_DETALLE_auditoria_update
 		after update on COMP_COMPROBANTES_DETALLE
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -439,8 +439,8 @@ DETALLE DE COMPROBANTES DE COMPRA
 		/*------------------------------------------
 		Registro en auditoria eliminacion de detalle de comprobante
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_delete;
-		CREATE TRIGGER auditoria_delete
+		DROP TRIGGER IF EXISTS COMP_COMPROBANTES_DETALLE_auditoria_delete;
+		CREATE TRIGGER COMP_COMPROBANTES_DETALLE_auditoria_delete
 		before delete on COMP_COMPROBANTES_DETALLE
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -479,8 +479,8 @@ PAGOS DE COMPROBANTES
 		/*------------------------------------------
 		Registro en auditoria nuevo pago
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_insert;
-		CREATE TRIGGER auditoria_insert
+		DROP TRIGGER IF EXISTS COMP_PAGOS_auditoria_insert;
+		CREATE TRIGGER COMP_PAGOS_auditoria_insert
 		after insert on COMP_PAGOS
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -502,8 +502,8 @@ PAGOS DE COMPROBANTES
 		/*------------------------------------------
 		Registro en auditoria actualizacion de pago
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_update;
-		CREATE TRIGGER auditoria_update
+		DROP TRIGGER IF EXISTS COMP_PAGOS_auditoria_update;
+		CREATE TRIGGER COMP_PAGOS_auditoria_update
 		after update on COMP_PAGOS
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -525,8 +525,8 @@ PAGOS DE COMPROBANTES
 		/*------------------------------------------
 		Registro en auditoria eliminacion de pago
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_delete;
-		CREATE TRIGGER auditoria_delete
+		DROP TRIGGER IF EXISTS COMP_PAGOS_auditoria_delete;
+		CREATE TRIGGER COMP_PAGOS_auditoria_delete
 		before delete on COMP_PAGOS
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -568,8 +568,8 @@ MAESTRO DE CLIENTES
 		/*------------------------------------------
 		Registro en auditoria nuevo proveedor
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_insert;
-		CREATE TRIGGER auditoria_insert
+		DROP TRIGGER IF EXISTS CLIE_CLIENTES_auditoria_insert;
+		CREATE TRIGGER CLIE_CLIENTES_auditoria_insert
 		after insert on CLIE_CLIENTES
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -591,8 +591,8 @@ MAESTRO DE CLIENTES
 		/*------------------------------------------
 		Registro en auditoria actualizacion de proveedor
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_update;
-		CREATE TRIGGER auditoria_update
+		DROP TRIGGER IF EXISTS CLIE_CLIENTES_auditoria_update;
+		CREATE TRIGGER CLIE_CLIENTES_auditoria_update
 		after update on CLIE_CLIENTES
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -614,8 +614,8 @@ MAESTRO DE CLIENTES
 		/*------------------------------------------
 		Registro en auditoria eliminacion de proveedor
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_delete;
-		CREATE TRIGGER auditoria_delete
+		DROP TRIGGER IF EXISTS CLIE_CLIENTES_auditoria_delete;
+		CREATE TRIGGER CLIE_CLIENTES_auditoria_delete
 		before delete on CLIE_CLIENTES
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -652,8 +652,8 @@ TIPOS DE COMPROBANTES DE VENTAS
 		/*------------------------------------------
 		Registro en auditoria nuevo tipo de comprobante de egreso
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_insert;
-		CREATE TRIGGER auditoria_insert
+		DROP TRIGGER IF EXISTS VENT_COMPROBANTES_TIPOS_auditoria_insert;
+		CREATE TRIGGER VENT_COMPROBANTES_TIPOS_auditoria_insert
 		after insert on VENT_COMPROBANTES_TIPOS
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -675,8 +675,8 @@ TIPOS DE COMPROBANTES DE VENTAS
 		/*------------------------------------------
 		Registro en auditoria actualizacion de tipo de comprobante de ingreso
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_update;
-		CREATE TRIGGER auditoria_update
+		DROP TRIGGER IF EXISTS VENT_COMPROBANTES_TIPOS_auditoria_update;
+		CREATE TRIGGER VENT_COMPROBANTES_TIPOS_auditoria_update
 		after update on VENT_COMPROBANTES_TIPOS
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -698,8 +698,8 @@ TIPOS DE COMPROBANTES DE VENTAS
 		/*------------------------------------------
 		Registro en auditoria eliminacion de tipo de comprobante de ingreso
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_delete;
-		CREATE TRIGGER auditoria_delete
+		DROP TRIGGER IF EXISTS VENT_COMPROBANTES_TIPOS_auditoria_delete;
+		CREATE TRIGGER VENT_COMPROBANTES_TIPOS_auditoria_delete
 		before delete on VENT_COMPROBANTES_TIPOS
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -741,8 +741,8 @@ CABECERA DE COMPROBANTES DE VENTA
 		/*------------------------------------------
 		Registro en auditoria nuevo cabecera de comprobantes de venta
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_insert;
-		CREATE TRIGGER auditoria_insert
+		DROP TRIGGER IF EXISTS VENT_COMPROBANTES_auditoria_insert;
+		CREATE TRIGGER VENT_COMPROBANTES_auditoria_insert
 		after insert on VENT_COMPROBANTES
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -764,8 +764,8 @@ CABECERA DE COMPROBANTES DE VENTA
 		/*------------------------------------------
 		Registro en auditoria actualizacion de cabecera de comprobantes de ventas
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_update;
-		CREATE TRIGGER auditoria_update
+		DROP TRIGGER IF EXISTS VENT_COMPROBANTES_auditoria_update;
+		CREATE TRIGGER VENT_COMPROBANTES_auditoria_update
 		after update on VENT_COMPROBANTES
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -787,8 +787,8 @@ CABECERA DE COMPROBANTES DE VENTA
 		/*------------------------------------------
 		Registro en auditoria eliminacion de cabecera de comprobantes de ventas
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_delete;
-		CREATE TRIGGER auditoria_delete
+		DROP TRIGGER IF EXISTS VENT_COMPROBANTES_auditoria_delete;
+		CREATE TRIGGER VENT_COMPROBANTES_auditoria_delete
 		before delete on VENT_COMPROBANTES
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -829,8 +829,8 @@ DETALLE DE COMPROBANTES DE VENTA
 		/*------------------------------------------
 		Registro en auditoria nuevo detalle de comprobante de venta
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_insert;
-		CREATE TRIGGER auditoria_insert
+		DROP TRIGGER IF EXISTS VENT_COMPROBANTES_DETALLE_auditoria_insert;
+		CREATE TRIGGER VENT_COMPROBANTES_DETALLE_auditoria_insert
 		after insert on VENT_COMPROBANTES_DETALLE
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -852,8 +852,8 @@ DETALLE DE COMPROBANTES DE VENTA
 		/*------------------------------------------
 		Registro en auditoria actualizacion de detalle de comprobante
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_update;
-		CREATE TRIGGER auditoria_update
+		DROP TRIGGER IF EXISTS VENT_COMPROBANTES_DETALLE_auditoria_update;
+		CREATE TRIGGER VENT_COMPROBANTES_DETALLE_auditoria_update
 		after update on VENT_COMPROBANTES_DETALLE
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -875,8 +875,8 @@ DETALLE DE COMPROBANTES DE VENTA
 		/*------------------------------------------
 		Registro en auditoria eliminacion de detalle de comprobante
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_delete;
-		CREATE TRIGGER auditoria_delete
+		DROP TRIGGER IF EXISTS VENT_COMPROBANTES_DETALLE_auditoria_delete;
+		CREATE TRIGGER VENT_COMPROBANTES_DETALLE_auditoria_delete
 		before delete on VENT_COMPROBANTES_DETALLE
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -915,8 +915,8 @@ COBROS DE COMPROBANTES
 		/*------------------------------------------
 		Registro en auditoria nuevo pago
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_insert;
-		CREATE TRIGGER auditoria_insert
+		DROP TRIGGER IF EXISTS VENT_COBROS_auditoria_insert;
+		CREATE TRIGGER VENT_COBROS_auditoria_insert
 		after insert on VENT_COBROS
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -938,8 +938,8 @@ COBROS DE COMPROBANTES
 		/*------------------------------------------
 		Registro en auditoria actualizacion de pago
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_update;
-		CREATE TRIGGER auditoria_update
+		DROP TRIGGER IF EXISTS VENT_COBROS_auditoria_update;
+		CREATE TRIGGER VENT_COBROS_auditoria_update
 		after update on VENT_COBROS
 		for each row
 		insert into AUDI_AUDITORIA (
@@ -961,8 +961,8 @@ COBROS DE COMPROBANTES
 		/*------------------------------------------
 		Registro en auditoria eliminacion de pago
 		--------------------------------------------*/
-		DROP TRIGGER IF EXISTS auditoria_delete;
-		CREATE TRIGGER auditoria_delete
+		DROP TRIGGER IF EXISTS VENT_COBROS_auditoria_delete;
+		CREATE TRIGGER VENT_COBROS_auditoria_delete
 		before delete on VENT_COBROS
 		for each row
 		insert into AUDI_AUDITORIA (
