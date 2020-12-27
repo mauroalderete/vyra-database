@@ -114,7 +114,7 @@ MAESTRO DE PROVEEDORES
 			current_user
 		);
 /************************************************************************************************************************************************
-MODULO STOCK
+MODULO STOCK (1/2)
 *************************************************************************************************************************************************/
 /************************************************************************************************************************************************
 MAESTRO DE ARTICULOS
@@ -410,7 +410,7 @@ DETALLE DE COMPROBANTES DE COMPRA
             'COMP',
             'CCDE',
             'Alta de detalle de comprobante',
-			CONCAT(new.CCDE_TIPO_CCCA, '-', new.CCDE_NUMERO_CCCA, '-', new.CCDE_RENGLON),
+			CONCAT(new.CCDE_TIPO_CCCA, '-', new.CCDE_NUMERO_CCCA, '/', new.CCDE_RENGLON),
 			current_user
 		);
 		/*------------------------------------------
@@ -433,7 +433,7 @@ DETALLE DE COMPROBANTES DE COMPRA
             'COMP',
             'CCDE',
             'Modificación de detalle de comprobante',
-			CONCAT(new.CCDE_TIPO_CCCA, '-', new.CCDE_NUMERO_CCCA, '-', new.CCDE_RENGLON),
+			CONCAT(new.CCDE_TIPO_CCCA, '-', new.CCDE_NUMERO_CCCA, '/', new.CCDE_RENGLON),
 			current_user
 		);
 		/*------------------------------------------
@@ -456,7 +456,7 @@ DETALLE DE COMPROBANTES DE COMPRA
 			'COMP',
 			'CCDE',
 			'Eliminación de detalle de comprobante',
-			CONCAT(old.CCDE_TIPO_CCCA, '-', old.CCDE_NUMERO_CCCA, '-', old.CCDE_RENGLON),
+			CONCAT(old.CCDE_TIPO_CCCA, '-', old.CCDE_NUMERO_CCCA, '/', old.CCDE_RENGLON),
 			current_user
 		);
 /************************************************************************************************************************************************
@@ -496,7 +496,7 @@ PAGOS DE COMPROBANTES
             'COMP',
             'CPAG',
             'Alta de pago',
-			CONCAT(new.CPAG_TIPO_CCCA, '-', new.CPAG_NUMERO_CCCA, '-', new.CPAG_PAGO),
+			CONCAT(new.CPAG_TIPO_CCCA, '-', new.CPAG_NUMERO_CCCA, '/', new.CPAG_PAGO),
 			current_user
 		);
 		/*------------------------------------------
@@ -519,7 +519,7 @@ PAGOS DE COMPROBANTES
             'COMP',
             'CPAG',
             'Modificación de pago',
-			CONCAT(new.CPAG_TIPO_CCCA, '-', new.CPAG_NUMERO_CCCA, '-', new.CPAG_PAGO),
+			CONCAT(new.CPAG_TIPO_CCCA, '-', new.CPAG_NUMERO_CCCA, '/', new.CPAG_PAGO),
 			current_user
 		);
 		/*------------------------------------------
@@ -542,7 +542,7 @@ PAGOS DE COMPROBANTES
 			'COMP',
 			'CPAG',
 			'Eliminación de pago',
-			CONCAT(old.CPAG_TIPO_CCCA, '-', old.CPAG_NUMERO_CCCA, '-', old.CPAG_PAGO),
+			CONCAT(old.CPAG_TIPO_CCCA, '-', old.CPAG_NUMERO_CCCA, '/', old.CPAG_PAGO),
 			current_user
 		);
 /************************************************************************************************************************************************
@@ -846,7 +846,7 @@ DETALLE DE COMPROBANTES DE VENTA
             'VENT',
             'CVDE',
             'Alta de detalle de comprobante venta',
-			CONCAT(new.CVDE_TIPO_CVCA, '-', new.CVDE_NUMERO_CVCA, '-', new.CVDE_RENGLON),
+			CONCAT(new.CVDE_TIPO_CVCA, '-', new.CVDE_NUMERO_CVCA, '/', new.CVDE_RENGLON),
 			current_user
 		);
 		/*------------------------------------------
@@ -869,7 +869,7 @@ DETALLE DE COMPROBANTES DE VENTA
             'VENT',
             'CVDE',
             'Modificación de detalle de comprobante venta',
-			CONCAT(new.CVDE_TIPO_CVCA, '-', new.CVDE_NUMERO_CVCA, '-', new.CVDE_RENGLON),
+			CONCAT(new.CVDE_TIPO_CVCA, '-', new.CVDE_NUMERO_CVCA, '/', new.CVDE_RENGLON),
 			current_user
 		);
 		/*------------------------------------------
@@ -892,7 +892,7 @@ DETALLE DE COMPROBANTES DE VENTA
 			'VENT',
 			'CVDE',
 			'Eliminación de detalle de comprobante venta',
-			CONCAT(old.CVDE_TIPO_CVCA, '-', old.CVDE_NUMERO_CVCA, '-', old.CVDE_RENGLON),
+			CONCAT(old.CVDE_TIPO_CVCA, '-', old.CVDE_NUMERO_CVCA, '/', old.CVDE_RENGLON),
 			current_user
 		);
 /************************************************************************************************************************************************
@@ -932,7 +932,7 @@ COBROS DE COMPROBANTES
             'VENT',
             'CCOB',
             'Alta de cobro',
-			CONCAT(new.CCOB_TIPO_CVCA, '-', new.CCOB_NUMERO_CVCA, '-', new.CCOB_COBRO),
+			CONCAT(new.CCOB_TIPO_CVCA, '-', new.CCOB_NUMERO_CVCA, '/', new.CCOB_COBRO),
 			current_user
 		);
 		/*------------------------------------------
@@ -955,7 +955,7 @@ COBROS DE COMPROBANTES
             'VENT',
             'CCOB',
             'Modificación de cobro',
-			CONCAT(new.CCOB_TIPO_CVCA, '-', new.CCOB_NUMERO_CVCA, '-', new.CCOB_COBRO),
+			CONCAT(new.CCOB_TIPO_CVCA, '-', new.CCOB_NUMERO_CVCA, '/', new.CCOB_COBRO),
 			current_user
 		);
 		/*------------------------------------------
@@ -978,7 +978,8 @@ COBROS DE COMPROBANTES
 			'VENT',
 			'COCB',
 			'Eliminación de cobro',
-			CONCAT(old.CCOB_TIPO_CVCA, '-', old.CCOB_NUMERO_CVCA, '-', old.CCOB_COBRO),
+			CONCAT(old.CCOB_TIPO_CVCA, '-', old.CCOB_NUMERO_CVCA, '/', old.CCOB_COBRO),
+			current_user
 		);
 /************************************************************************************************************************************************
 MODULO STOCK (2/2)
