@@ -569,7 +569,6 @@ MAESTRO DE CLIENTES
 	CREATE TABLE IF NOT EXISTS CLIE_CLIENTES (
 	CLIE_CLIENTE int	unsigned auto_increment	primary key comment 'Clave principal que identifica a un cliente',
 	CLIE_NOMBRE varchar(45) not null comment 'Nombre o razon social de un cliente',
-	CLIE_CONTACTO	varchar(45) comment 'Nombre del contacto principal del cliente',
 	CLIE_TELEFONO	varchar(45) comment 'Telefono para efectuar llamadas',
 	CLIE_WHATSAPP	varchar(45) comment 'Numero de whatsapp',
 	CLIE_EMAIL	varchar(100) comment 'Correo electronico principal o ventas',
