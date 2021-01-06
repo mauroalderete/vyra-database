@@ -13,6 +13,8 @@ DROP TABLE IF EXISTS VENT_COMPROBANTES_DETALLE;
 DROP TABLE IF EXISTS VENT_COMPROBANTES;
 DROP TABLE IF EXISTS VENT_COMPROBANTES_TIPOS;
 DROP TABLE IF EXISTS STOC_ARTICULOS;
+DROP TABLE IF EXISTS STOC_MARCAS;
+DROP TABLE IF EXISTS STOC_UNIDADES;
 DROP TABLE IF EXISTS CLIE_CLIENTES;
 
 /************************************************************************************************************************************************
@@ -100,25 +102,41 @@ MODULO PROVEEDORES
 MODULO STOCK (1/2)
 *************************************************************************************************************************************************/
 	/************************************************************************************************************************************************
+	MAESTRO DE UNIDADES
+	*************************************************************************************************************************************************/
+	CREATE TABLE IF NOT EXISTS STOC_UNIDADES (
+		UNID_UNIDAD	serial	primary key,
+		UNID_NOMBRE varchar(45) not null,
+		UNID_SIMBOLO varchar(5) not null,
+		UNID_NOTAS	text,
+		UNID_BAJA	boolean not null default false
+	);
+	
+	/************************************************************************************************************************************************
+	MAESTRO DE MARCAS
+	*************************************************************************************************************************************************/
+	CREATE TABLE IF NOT EXISTS STOC_MARCAS (
+		MARC_MARCA	serial	primary key,
+		MARC_NOMBRE varchar(45) not null,
+		MARC_NOTAS	text,
+		MARC_BAJA	boolean not null default false
+	);
+	
+	/************************************************************************************************************************************************
 	MAESTRO DE ARTICULOS
 	*************************************************************************************************************************************************/
-	/*
-	Maestro de articulos
-	*/
 	CREATE TABLE IF NOT EXISTS STOC_ARTICULOS (
 		ARTS_ARTICULO	serial	primary key,
 		ARTS_NOMBRE varchar(45) not null,
-		CANTIDAD_MINIMA	decimal not null default 0,
+		ARTS_VALOR numeric(12,2) not null,
+		ARTS_UNIDAD_UNID int not null,
+		ARTS_MARCA_MARC int not null,
+		ARTS_CANTIDAD_MINIMA numeric(12,2) not null default 0,
 		ARTS_NOTAS	text,
-		ARTS_BAJA	boolean not null default false
+		ARTS_BAJA	boolean not null default false,
+		foreign key (ARTS_UNIDAD_UNID) references STOC_UNIDADES(UNID_UNIDAD),
+        foreign key (ARTS_MARCA_MARC) references STOC_MARCAS(MARC_MARCA)
 	);
-	
-	comment on table STOC_ARTICULOS is 'Maestro de articulos';
-	comment on column STOC_ARTICULOS.ARTS_ARTICULO is 'Clave principal que identifica a un articulo';
-	comment on column STOC_ARTICULOS.ARTS_NOMBRE is 'Nombre del articulo, se recomienda <nombre> <formato> <unidad medida>';
-	comment on column STOC_ARTICULOS.CANTIDAD_MINIMA is 'Indica la cantidad minima que debe haber en el stock antes de emitir una notificacion';
-	comment on column STOC_ARTICULOS.ARTS_NOTAS is 'Notas, comentarios y observaciones sobre el articulo';
-	comment on column STOC_ARTICULOS.ARTS_BAJA is 'Indica si el articulo esta dado de baja [true] o no [false]';
 
 /************************************************************************************************************************************************
 MODULO COMPRAS
