@@ -109,7 +109,8 @@ MODULO STOCK (1/2)
 		UNID_NOMBRE varchar(45) not null,
 		UNID_SIMBOLO varchar(5) not null,
 		UNID_NOTAS	text,
-		UNID_BAJA	boolean not null default false
+		UNID_BAJA	boolean not null default false,
+		UNIQUE(UNID_NOMBRE)
 	);
 	
 	/************************************************************************************************************************************************
@@ -119,7 +120,8 @@ MODULO STOCK (1/2)
 		MARC_MARCA	serial	primary key,
 		MARC_NOMBRE varchar(45) not null,
 		MARC_NOTAS	text,
-		MARC_BAJA	boolean not null default false
+		MARC_BAJA	boolean not null default false,
+		UNIQUE(MARC_NOMBRE)
 	);
 	
 	/************************************************************************************************************************************************
@@ -135,7 +137,8 @@ MODULO STOCK (1/2)
 		ARTS_NOTAS	text,
 		ARTS_BAJA	boolean not null default false,
 		foreign key (ARTS_UNIDAD_UNID) references STOC_UNIDADES(UNID_UNIDAD),
-        foreign key (ARTS_MARCA_MARC) references STOC_MARCAS(MARC_MARCA)
+        foreign key (ARTS_MARCA_MARC) references STOC_MARCAS(MARC_MARCA),
+		UNIQUE(ARTS_NOMBRE, ARTS_VALOR, ARTS_UNIDAD_UNID, ARTS_MARCA_MARC)
 	);
 
 /************************************************************************************************************************************************
