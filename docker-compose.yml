@@ -1,0 +1,23 @@
+version: '3.1'
+
+services:
+  db:
+    image: mariadb:10.6.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234560
+      MYSQL_DATABASE: dbvyra
+      MYSQL_USER: vyra
+      MYSQL_PASSWORD: 123456
+    volumes:
+      - ./mysql/initdb.d:/docker-entrypoint-initdb.d
+      - ./mysql/conf.d:/etc/mysql/conf.d
+      - ./mysql/data:/var/lib/mysql
+    ports:
+      - 5000:3306
+      
+  adminer:
+    image: adminer:4.8.0
+    restart: always
+    ports:
+      - 5001:8080
