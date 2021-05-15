@@ -1,0 +1,7 @@
+DROP DATABASE IF EXISTS dbvyra;
+
+CREATE DATABASE IF NOT EXISTS dbvyra
+	CHARACTER SET 'UTF8MB4'
+    COLLATE 'utf8mb4_spanish2_ci';
+
+USE dbvyra;
