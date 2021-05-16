@@ -48,6 +48,7 @@ DOMINIO PRINCIPAL: UNIDADES DE STOCK
 CREATE TABLE IF NOT EXISTS STOC_TIPOS_UNIDADES(
     TPUN_TIPO bigint unsigned not null auto_increment comment 'Clave principal de los tipos de unidades',
     TPUN_NOMBRE varchar(100) not null unique comment 'Nombre del tipo de unidad',
+    TPUN_NOTAS varchar(6000) null comment 'Notas, comentarios, observaciones',
 
     PRIMARY KEY (TPUN_TIPO)
 );
@@ -58,6 +59,7 @@ CREATE TABLE IF NOT EXISTS STOC_UNIDADES(
     UNID_NOMBRE_SINGULAR varchar(100) not null comment 'Nombre de la unidad cuando la cantidad es 1',
     UNID_NOMBRE_PLURAL varchar(100) not null comment 'Nombre de la unidad cuando la cantidad es mayor a 1',
     UNID_FACTOR decimal unsigned not null default 1 comment 'Es el factor de conversion de la unidad, indica cuantas unidades de stock equivalen a la unidad definida',
+    UNID_NOTAS varchar(6000) null comment 'Notas, comentarios, observaciones',
 
     PRIMARY KEY (UNID_UNIDAD),
     FOREIGN KEY (UNID_TIPO_TPUN) REFERENCES STOC_TIPOS_UNIDADES(TPUN_TIPO)
@@ -68,6 +70,7 @@ DOMINIO PRINCIPAL: MARCAS
 CREATE TABLE IF NOT EXISTS STOC_MARCAS(
     MARC_MARCA bigint unsigned not null auto_increment comment 'Clave principal de las marcas',
     MARC_NOMBRE varchar(100) not null unique comment 'Nombre de la marca',
+    MARC_NOTAS varchar(6000) null comment 'Notas, comentarios, observaciones',
 
     PRIMARY KEY (MARC_MARCA),
     UNIQUE KEY MARC_UK01 (MARC_NOMBRE)
@@ -79,6 +82,7 @@ CREATE TABLE IF NOT EXISTS STOC_RUBROS(
     RUBR_RUBRO bigint unsigned not null auto_increment comment 'Clave principal de los rubros',
     RUBR_PADRE bigint unsigned null comment 'Rubro padre al que pertenece',
     RUBR_NOMBRE varchar(100) not null unique comment 'Nombre del rubro',
+    RUBR_NOTAS varchar(6000) null comment 'Notas, comentarios, observaciones',
 
     PRIMARY KEY (RUBR_RUBRO),
     FOREIGN KEY (RUBR_PADRE) REFERENCES STOC_RUBROS(RUBR_RUBRO),
@@ -95,9 +99,9 @@ CREATE TABLE IF NOT EXISTS STOC_ARTICULOS(
     ARTS_MARCA_MARC bigint unsigned not null comment 'Marca del articulo',
     ARTS_UNISTO_TPUN bigint unsigned not null comment 'Tipo de unidad de stock con la que se mide el articulo',
     ARTS_CANTIDAD_MINIMA decimal unsigned not null default 0 comment 'Cantidad minima del articulo que debe haber siempre presente en el almacen',
-    ARTS_NOTAS varchar(6000) comment 'Notas, comentarios y observaciones',
     ARTS_ALTA_TIEMPO datetime not null default current_timestamp comment 'Fecha y hora en que se dio de alta el articulo',
     ARTS_BAJA_TIEMPO datetime null comment 'Fecha y hora en que se determina su baja. Puede ser un valor pasado o futuro.',
+    ARTS_NOTAS varchar(6000) null comment 'Notas, comentarios, observaciones',
 
     PRIMARY KEY (ARTS_ARTICULO),
     FOREIGN KEY (ARTS_RUBRO_RUBR) REFERENCES STOC_RUBROS(RUBR_RUBRO),
@@ -112,6 +116,7 @@ DOMINIO PRINCIPAL: COMBOS
 CREATE TABLE IF NOT EXISTS STOC_COMBOS(
     COMB_COMBO bigint unsigned not null comment 'Referencia al articulo que es un combo',
     COMB_HABILITADO boolean not null default TRUE comment 'Estado del combo',
+    COMB_NOTAS varchar(6000) null comment 'Notas, comentarios, observaciones',
 
     FOREIGN KEY (COMB_COMBO) REFERENCES STOC_ARTICULOS(ARTS_ARTICULO),
     UNIQUE KEY COMB_UK01 (COMB_COMBO)
@@ -121,6 +126,7 @@ CREATE TABLE IF NOT EXISTS STOC_COMBOS_DETALLE(
     CBDE_COMBO_COMB bigint unsigned not null comment 'Referencia al combo',
     CBDE_ARTICULO_ARTS bigint unsigned not null comment 'Referencia al articulo que compone parte del combo',
     CBDE_CANTIDAD decimal unsigned not null default 1 comment 'Cantidad del articulo en unidades de stock',
+    CBDE_NOTAS varchar(6000) null comment 'Notas, comentarios, observaciones',
 
     PRIMARY KEY (CBDE_COMBO_COMB, CBDE_ARTICULO_ARTS),
     FOREIGN KEY (CBDE_COMBO_COMB) REFERENCES STOC_COMBOS(COMB_COMBO) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -140,6 +146,7 @@ CREATE TABLE IF NOT EXISTS STOC_PARTIDAS(
     PART_BAJA_NOTAS varchar(6000) null comment 'Observaciones sobre la baja. Se indica la causa entre otras',
     PART_STOC_ACTUAL decimal unsigned not null comment 'Cantidad del articulo en unidades de stock actualmente',
     PART_FECHA_VENCIMIENTO datetime not null comment 'Fecha de vencimiento de la partida',
+    PART_NOTAS varchar(6000) null comment 'Notas, comentarios, observaciones',
 
     PRIMARY KEY (PART_PARTIDA),
     FOREIGN KEY (PART_ARTICULO_ARTS) REFERENCES STOC_ARTICULOS(ARTS_ARTICULO),

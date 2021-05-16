@@ -10,9 +10,9 @@ services:
       MYSQL_USER: vyra
       MYSQL_PASSWORD: 123456
     volumes:
-      - ./mysql/initdb.d:/docker-entrypoint-initdb.d
-      - ./mysql/conf.d:/etc/mysql/conf.d
-      - ./mysql/data:/var/lib/mysql
+      - ./volumes/initdb.d:/docker-entrypoint-initdb.d
+      - ./volumes/conf.d:/etc/mysql/conf.d
+      - ./volumes/data:/var/lib/mysql
     ports:
       - 5000:3306
       
