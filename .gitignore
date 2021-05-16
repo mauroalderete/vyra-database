@@ -2,4 +2,8 @@ backups
 backups/*
 .backups
 .backups/*
-mysql/data
+vyra-mariadb/volumes/data
+vyra-mariadb/temp
+vyra-mariadb/.temp
+.temp
+temp
